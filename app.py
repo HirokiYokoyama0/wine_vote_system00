@@ -157,7 +157,7 @@ def debug_preset():
     data3=Assecementdata2('mem_id:4 wine_id:1のコメントです',3,1)
     data3.score1_spicy=4.2
     data3.score2_acidity=4.2
-    data3.score3_total=4.2
+    data3.score3_total=4.7
     
     data4=Assecementdata2('mem_id:4 wine_id:3のコメントです',3,3)
     data4.score1_spicy=5
