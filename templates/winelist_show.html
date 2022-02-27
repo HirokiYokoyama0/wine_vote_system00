@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>DataTables Checkboxes</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+  <link rel="stylesheet" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"/>
+</head>
+<body>
+<table id="prefecture_table" class="table">
+  <thead>
+  <tr>
+      <th></th>
+      <th>番号</th>
+      <th>ワイン名</th>
+      <th>ぶどうの品種</th>
+      <th>備考</th>
+      <th>総合点数</th>
+  </tr>
+  </thead>
+</table>
+<div class="row m-3">
+  <span class="col">選択中の項目:</span>
+</div>
+<div class="row mx-3">
+  <span class="col" id="selection"></span>
+</div>
+
+<br><br><br>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous" defer></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous" defer></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" defer></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js" defer></script>
+<script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
+<script src="../static/js/functions.js" defer></script> 
+
+
+  現在のワインリストを表示する
+  <button onclick=test_click2()>表示</button><br>
+  
+  {#現在の選択しているものを表示する
+  <button onclick=selected_click()>確認ボタン</button><br>#}
+
+  <button onclick=send_text()>選択する</button><br>
+
+  {#<form action="/prepare" method="POST">
+    <input type="text" name="username" placeholder="Enter name" required>
+    <input type="submit" value="登録">
+  </form>#}
+
+  <script>
+
+    function selected_click(){
+      //let list_data = {{ inputjson_from_python | tojson }};
+     
+      
+      let table = $('#prefecture_table').DataTable();
+      
+      //選択項目を取得
+      let selected_data = table.column(0).checkboxes.selected();
+      //let selected_data = $("#prefecture_table").column(0).checkboxes.selected();
+      //alert(selected_data)
+      
+      //console.log(selected_data)
+  
+    
+      console.log(selected_data.length)
+      let selected_brandname =""
+
+      for (let i = 0; i < selected_data.length; i++) {
+          
+          selected_brandname += selected_data[i] + '    ,';
+          alert(selected_brandname)
+
+      }
+      $('#selection').text(selected_brandname);
+    };
+
+    function test_click2(){
+   
+      let list_data3 = {{ inputjson_from_python | tojson }};
+      let list_data = {{ eee | tojson }};
+   
+
+      //alert(list_data)
+
+    
+      let table;
+        $(document).ready(function() {
+          /*let data = [
+              {id: 1, brandname: 'カデ・ドック・シャルドネ', population:'シャルドネ'},
+              {id: 2, brandname: 'エノテカ　シャルドネ', population: 'シャルドネ'},
+              {id: 3, brandname: 'マプ・ソーヴィニヨン・ブラン', population:'ソーヴィニヨン・ブラン'},
+              {id: 4, brandname: list_data[0], population: 'ソーヴィニヨン・ブラン'},
+         ];*/
+         let data = list_data;
+    
+      let option = {
+        columns: [
+          {
+              data: 'Brandname',
+              checkboxes: {
+                  selectRow: true
+              }
+          },
+          {data: 'id'},
+          {data: 'Brandname'},
+          {data: 'Grapevarieties'},
+          {data: 'OtherInfo'},
+          {data: 'Score_overall', className: 'text-right'},
+        ],
+        data: data,
+        order: [1, 'asc'],
+        select: {
+          style: 'multi'
+        },
+      };
+    table = $('#prefecture_table').DataTable(option);
+    
+  });
+  }
+
+
+   
+
+
+  </script>
+
+  
+
+</body>
+
+
+{% endblock %}

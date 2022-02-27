@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<p>登録するワイン情報を入力してください</p>
+<form action="/wine_register_add" method="POST">
+        <input type="text" name="Brandname" placeholder="ブランド名" required>
+        {# <input type="text" name="Grapevarieties" placeholder="ぶどうの品種"> #}
+        ぶどうの品種
+        <select name="Grapevarieties">
+                <option value= "null" disabled selected>選択して下さい</option>
+                <option value= "ソーヴィニヨンブラン">ソーヴィニヨンブラン</option>
+                <option value= "シャルドネ">シャルドネ</option>
+                <option value= "リースリング">リースリング</option>
+                <option value= "シュナンブラン">シュナンブラン</option>
+                <option value= "セミヨン">セミヨン</option>
+        </select>
+
+        <input type="number" name="Vintage" placeholder="生産年（西暦）">
+        <input type="text" name="OtherInfo" placeholder="その他情報">
+
+
+        <input type="submit" value="登録">
+</form>
+
+
+{% endblock %}

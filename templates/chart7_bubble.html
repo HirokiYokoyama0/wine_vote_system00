@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+  <meta charset="utf-8">
+　　 <title>グラフ</title> 
+</head>
+  <body>
+
+    <div style="position:absolute; top:200px; left:10px; width:1000px; height:1000px;">
+    <canvas id="myBubbleChart"></canvas>
+    <!-- CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+
+    <script>
+    var ctx = document.getElementById("myBubbleChart");
+    var myBubbleChart = new Chart(ctx, {
+        type: 'bubble',
+        data: {
+
+            datasets: [
+                {
+                    label:"リースリング：ヴィントナーズ・リザーヴ・リースリング",
+                    backgroundColor: "rgba(219,39,91,0.5)",
+                    data:[
+                        {x: 15,y: 60,r: 10},
+                        {x: 25,y: 20,r: 10},
+                        {x: 10,y: 70,r: 10},
+                        {x: 30,y: 40,r: 10},
+                        {x: 20,y: 30,r: 10}
+                    ]
+                },
+                {
+                    label:"シャルドネ：ブルゴーニュ・シャルドネ",
+                    backgroundColor: "rgba(0,39,91,0.5)",
+                    /*data:[
+                        {x: 35,y: 50,r: 5},
+                        {x: 15,y: 25,r: 10},
+                        {x: 34,y: 40,r: 10},
+                        {x: 12,y: 15,r: 15},
+                        {x: 25,y: 55,r: 20}
+                    ]*/
+                    data: [
+                        {% for item in xxList %}
+                        {x:{{item}},y:{{yyList[loop.index0]}},r:{{rrList[loop.index0]}} },
+                        {% endfor %}
+                    ]
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontSize: 14,
+                fontStyle: 'normal', // 太字にしない
+                padding: 20,
+                text: '試飲投票結果'
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel:{
+                        display: true,
+                        fontSize: 14,   
+                        labelString: "果実味----辛口 "
+                    },
+                    ticks: {
+                        suggestedMax: 50,
+                        suggestedMin: 0,
+                        stepSize: 10,
+                        callback: function(value, index, values){
+                            return  value +  '点'
+                        }
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel:{
+                        display: true,
+                        fontSize: 14,   
+                        labelString: "酸味"
+                    },
+                    ticks: {
+                        suggestedMax: 80,
+                        suggestedMin: 0,
+                        stepSize: 10,
+                        callback: function(value, index, values){
+                            return  value +  '点'
+                        }
+                    }
+                }]
+            }
+        }
+    })
+    </script>
+    </div>
+  </body>
+
+  <div style="border:1px solid gray; text-align:left; width:300px;">
+ 
+  <h6>バブルチャート:確認用</h6>
+
+    data: [
+        {% for item in xxList %}
+        {x:{{item}},y:{{yyList[loop.index0]}},r:{{rrList[loop.index0]}} },
+        {% endfor %}
+    ]
+
+　　</div>
+
+  {% endblock %}

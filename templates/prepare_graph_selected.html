@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<p> 私のユーザ名は　{{myname}}　です</p>
+
+
+<p>グラフ表示をするワインを選んでください</p><div class="pb-5"></div>
+
+<div class="card" style="width: 70rem;">
+<form action="/draw_graph" method="POST" enctype="multipart/form-data">
+
+
+
+    {% for winename in wine_selected %}
+
+            <label for="ck1">　 {{ loop.index }}：  <strong> {{ winename.Brandname }} </strong>  </label>
+            <input type="checkbox" id= {{ loop.index }} name="checkbox" value={{ winename.Brandname }} >　<br>
+
+    {% endfor %}
+    
+
+     <input type="submit" value="グラフ表示">
+
+
+
+</form>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

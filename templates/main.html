@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="pb-5">
+        <div class="card" style="width: 30rem;">
+                <div class="card-body">
+                <h5 class="card-title">ユーザ名を入力してください</h5>
+                <form action="/index" method="POST">
+                        <input type="text" name="username" placeholder="Enter name" required>
+                        <input type="submit" value="登録">
+                </form>
+                </div>
+        </div>
+</div>
+
+
+{% endblock %}

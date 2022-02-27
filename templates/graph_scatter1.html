@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<head>
+  <meta charset="utf-8">
+　<title>グラフ</title> 
+</head>
+<body>
+  <br>
+  <br>
+  <h1>散布図</h1>
+
+<div id="element1">
+  <img src="{{ url_for('scatter_png') }}" alt="Image">
+</div>
+
+
+</body>
+
+{% endblock %}
