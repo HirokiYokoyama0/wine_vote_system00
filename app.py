@@ -52,6 +52,8 @@ class WineListdata(db.Model):
     Grapevarieties = db.Column(db.String(128), nullable=True)
     OtherInfo = db.Column(db.String(256), nullable=True)
     Score_overall = db.Column(db.Integer, nullable=False)
+    Score1_spicy_ave = db.Column(db.Integer, nullable=True)
+    Score2_acidity_ave = db.Column(db.Integer, nullable=True)
     Selectedflg = db.Column(db.Integer, nullable=True)
 
     #assessment2 = db.relationship('Assecementdata2', backref='winelist',  lazy='dynamic') #Assecementdataとのリレーション
@@ -59,11 +61,13 @@ class WineListdata(db.Model):
     #assessment2 = db.relationship('Assecementdata2', backref='winelist', uselist=False) #Assecementdataとのリレーション
     assessment2 = db.relationship('Assecementdata2', backref='winelist',  lazy='select')
 
-    def __init__(self, Brandname = '' ,Grapevarieties = '',OtherInfo = '',Score_overall = 0):
+    def __init__(self, Brandname = '' ,Grapevarieties = '',OtherInfo = '',Score_overall = 0,Score1_spicy_ave=0,Score2_acidity_ave=0):
         self.Brandname = Brandname
         self.Grapevarieties = Grapevarieties
         self.OtherInfo = OtherInfo
         self.Score_overall = Score_overall
+        self.Score1_spicy_ave = Score1_spicy_ave
+        self.Score2_acidity_ave = Score2_acidity_ave
 
     def __str__(self):
         if self.assessment2:
@@ -138,9 +142,9 @@ def debug_preset():
     db.session.add_all([tom,nancy,hiroki])
     db.session.commit()
 
-    new_Wine1 = WineListdata(Brandname = 'カデ・ドック・シャルドネ' ,Grapevarieties = 'シャルドネ',OtherInfo = 'https://vinica.me/Cadet-d%27Oc-Chardonnay-w7517',Score_overall = 0)
+    new_Wine1 = WineListdata(Brandname = 'カデ・ドック・シャルドネ' ,Grapevarieties = 'シャルドネ',OtherInfo = 'https://vinica.me/Cadet-d%27Oc-Chardonnay-w7517',Score_overall = 2.75,Score1_spicy_ave=4.1,Score2_acidity_ave=4.2)
     new_Wine2 = WineListdata(Brandname = 'エノテカ　シャルドネ' ,Grapevarieties = 'シャルドネ',OtherInfo = '',Score_overall = 0)
-    new_Wine3 = WineListdata(Brandname = 'マプ・ソーヴィニヨン・ブラン' ,Grapevarieties = 'ソーヴィニヨン',OtherInfo = 'https://vinica.me/Mapu-Sauvignon-Blanc-w1637',Score_overall = 0)
+    new_Wine3 = WineListdata(Brandname = 'マプ・ソーヴィニヨン・ブラン' ,Grapevarieties = 'ソーヴィニヨン',OtherInfo = 'https://vinica.me/Mapu-Sauvignon-Blanc-w1637',Score_overall = 2.74,Score1_spicy_ave=4.3,Score2_acidity_ave=4.5)
     db.session.add_all([new_Wine1,new_Wine2,new_Wine3])
     db.session.commit()
 
@@ -482,7 +486,7 @@ def draw_graph():
     MemberList_DB = db.session.query(Member).all() #DBからメンバーリストを割り当てる
 
 
-    return render_template('chart_result.html',selected_wine=selected_wine,comment_data1=comment_data1,comment_data2=comment_data2,MemberList_DB=MemberList_DB,wine_selectedid_1=wine_selectedid_1)
+    return render_template('chart_result.html',selected_wine=selected_wine,comment_data1=comment_data1,comment_data2=comment_data2,MemberList_DB=MemberList_DB,wine_selectedid_1=wine_selectedid_1,wine_selectedid_2=wine_selectedid_2)
 
 
 
