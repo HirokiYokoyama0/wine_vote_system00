@@ -97,6 +97,8 @@ class Assecementdata2(db.Model):
     score1_spicy = db.Column(db.Integer, nullable=True)
     score2_acidity = db.Column(db.Integer, nullable=True)
     score3_total = db.Column(db.Integer, nullable=True)
+    aroma_1 = db.Column(db.Text)
+    aroma_2 = db.Column(db.Text)
 
     # 外部キー
     members_id = db.Column(db.Integer, db.ForeignKey('members.id'))
@@ -136,9 +138,9 @@ def debug_preset():
     db.session.add_all([tom,nancy,hiroki])
     db.session.commit()
 
-    new_Wine1 = WineListdata(Brandname = 'カデ・ドック・シャルドネ' ,Grapevarieties = 'シャルドネ',OtherInfo = '',Score_overall = 0)
+    new_Wine1 = WineListdata(Brandname = 'カデ・ドック・シャルドネ' ,Grapevarieties = 'シャルドネ',OtherInfo = 'https://vinica.me/Cadet-d%27Oc-Chardonnay-w7517',Score_overall = 0)
     new_Wine2 = WineListdata(Brandname = 'エノテカ　シャルドネ' ,Grapevarieties = 'シャルドネ',OtherInfo = '',Score_overall = 0)
-    new_Wine3 = WineListdata(Brandname = 'マプ・ソーヴィニヨン・ブラン' ,Grapevarieties = 'ソーヴィニヨン',OtherInfo = '',Score_overall = 0)
+    new_Wine3 = WineListdata(Brandname = 'マプ・ソーヴィニヨン・ブラン' ,Grapevarieties = 'ソーヴィニヨン',OtherInfo = 'https://vinica.me/Mapu-Sauvignon-Blanc-w1637',Score_overall = 0)
     db.session.add_all([new_Wine1,new_Wine2,new_Wine3])
     db.session.commit()
 
@@ -148,26 +150,37 @@ def debug_preset():
     data1.score1_spicy=3
     data1.score2_acidity=3
     data1.score3_total=4.3
+    data1.aroma_1="青りんご"
+    data1.aroma_2="スイカズラ"
 
     data2=Assecementdata2('mem_id:1 wine_id:2のコメントです',1,2)
     data2.score1_spicy=3.2
     data2.score2_acidity=3.2
     data2.score3_total=3.2
+    data2.aroma_1="白桃"
+    data2.aroma_2="白バラ"
     
-    data3=Assecementdata2('mem_id:4 wine_id:1のコメントです',3,1)
+    data3=Assecementdata2('mem_id:3 wine_id:1のコメントです',3,1)
     data3.score1_spicy=4.2
     data3.score2_acidity=4.2
     data3.score3_total=4.7
+    data3.aroma_1="マンゴー"
+    data3.aroma_2="アカシア"
     
-    data4=Assecementdata2('mem_id:4 wine_id:3のコメントです',3,3)
+    
+    data4=Assecementdata2('mem_id:3 wine_id:3のコメントです',3,3)
     data4.score1_spicy=5
     data4.score2_acidity=5
     data4.score3_total=5
+    data4.aroma_1="アプリコット"
+    data4.aroma_2="菩提樹"
 
-    data5=Assecementdata2('mem_id:4 wine_id:4のコメントです',3,4)
+    data5=Assecementdata2('mem_id:2 wine_id:3のコメントです',2,3)
     data5.score1_spicy=1
     data5.score2_acidity=1
     data5.score3_total=1
+    data5.aroma_1="バナナ"
+    data5.aroma_2="キンモクセイ"
 
     db.session.add_all([data1, data2,data3,data4,data5])
     db.session.commit()
@@ -223,13 +236,7 @@ def winelist():
 
     WineListdata_one = db.session.query(WineListdata).first()
     WineListdata_all = db.session.query(WineListdata).all()
-    """
-    bbbb=WineListdata_one.toDict2()
-    bbbb['id']=int(bbbb['id'])
-    print("bbbb->",bbbb)
-    print("bbbbt->",type(bbbb))
-    print("bbbb2->",bbbb['id'])
-    """
+
 
     eee = []
     for member in WineListdata_all:
@@ -312,6 +319,8 @@ def hyouka_regi():
     score2_acidity = int(request.form.get('score2_acidity'))
     score3_total = int(request.form.get('score3_total'))
     comment = request.form.get('comment')
+    aroma_1 = request.form.get('sel_aroma_kudamono')
+    aroma_2 = request.form.get('sel_aroma_hana')
 
     wind_id = int(request.form.get('action'))
     user_id = db.session.query(Member).filter_by(name = myname).first()
@@ -328,6 +337,8 @@ def hyouka_regi():
         asdata.score1_spicy=score1_spicy
         asdata.score2_acidity=score2_acidity
         asdata.score3_total=score3_total
+        asdata.aroma_1 = aroma_1
+        asdata.aroma_2 = aroma_2
      
         db.session.add(asdata)
     else:
@@ -335,37 +346,18 @@ def hyouka_regi():
         asse_update.score1_spicy=score1_spicy
         asse_update.score2_acidity=score2_acidity
         asse_update.score3_total=score3_total
+        asse_update.aroma_1 = aroma_1
+        asse_update.aroma_2 = aroma_2
+
 
     db.session.commit()
 
     
-
-   
-
     ## セレクトされているWineListdata
     wine_selected = db.session.query(WineListdata).filter_by(Selectedflg=1).all()
 
      ## WineListdataとAssecementdataを結合
     allwinelist = db.session.query(WineListdata).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).all()
-    '''
-    #allwinelist2 = db.session.query(WineListdata).filter_by(Selectedflg=1).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).filter_by(members_id=1).all()
-    #allwinelist3 = db.session.query(Assecementdata2).filter_by(members_id=4).join(WineListdata, WineListdata.id == Assecementdata2.wine_id).all()
-    #allwinelist2 = db.session.query(WineListdata).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).filter_by(members_id=user_id.id).all()
-    #allwinelist2 = db.session.query(WineListdata,Assecementdata2).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).filter_by(Selectedflg=1,members_id=4).all()
-    
-    for wine3 in allwinelist3:
-         #if wine2.Selectedflg == 1 : #and wine.members_id == user_id 
-            for test2 in wine3.assessment2:
-             #for test2 in wine2:
-                print("=======")
-                #print("コメント→",wine2)
-                print("Selectedflag→",wine3.Selectedflg)
-                print("wine_id→",test2.wine_id)
-                print("members_id",test2.members_id)
-                print("id→",test2.id)
-                #print("members_id→",wine2.assessment2.members_id)
-                #print("end")
-    '''
 
     wine_scorelist =[]
 
@@ -397,6 +389,11 @@ def scatter():
 @app.route("/scatter.png") #結果グラフ表示 画像部分
 def scatter_png():
     """The view for rendering the scatter chart"""
+
+    score1_spicy_l = [[],[]]
+    score2_acidity_l=[[],[]]
+    score3_total_l=[[],[]]
+    username_l=[[],[]]
 
     score1_spicy_s=[]
     score2_acidity_s=[]
@@ -432,22 +429,27 @@ def scatter_png():
                     print("menです1->",test.members_id)
                     print("menです2->",user_name)
                     print("menです3->",user_name2.name)
-                    print("---------------")
-
-
-                    if (test.score1_spicy is not None and
-                        test.score2_acidity is not None and 
-                        test.score3_total is not None):
-                         i1=i1+1
-                         score1_spicy_s.append(test.score1_spicy)
-                         score2_acidity_s.append(test.score2_acidity)
-                         score3_total_s.append(test.score3_total*10)
-                         username_s.append(user_name2.name)
+                   
+                    score1_spicy_l[0].append(test.score1_spicy)
+                    score2_acidity_l[0].append(test.score2_acidity)
+                    score3_total_l[0].append(test.score3_total)
+                    username_l[0].append(user_name2.name)
         
-    
-    print("aaaaaaaaaaa---->",comment_data)
+        elif wine.Brandname == wine_selectedid2[1].Brandname : 
+            for test in wine.assessment2:
+                user_name2 = db.session.query(Member).filter_by(id = test.members_id).first()
 
-    img = get_main_image(score1_spicy_s,score2_acidity_s,score3_total_s,username_s)
+                score1_spicy_l[1].append(test.score1_spicy)
+                score2_acidity_l[1].append(test.score2_acidity)
+                score3_total_l[1].append(test.score3_total)
+                username_l[1].append(user_name2.name)
+        
+        else :
+            aaaa = 1
+
+
+
+    img = get_main_image(score1_spicy_l,score2_acidity_l,score3_total_l,username_l,wine_selectedid2)
     return send_file(img, mimetype='image/png', cache_timeout=0)
 
 
@@ -467,61 +469,20 @@ def draw_graph():
     selected_wine = request.form.getlist('checkbox')
     print("===>",selected_wine)    
 
-    ## 今回選択されたWineListdataからIDを抽出
-    #wine_selectedtest = db.session.query(WineListdata.id).filter_by(Brandname=selected_wine[0]).all()
-    #print("====>",wine_selectedtest) 
-
     ## WineListdataとAssecementdataを結合
     allwinelist = db.session.query(WineListdata).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).all()
 
+    ##アセスデータからセレクトしている２つ分のデータを抽出
+    wine_selectedid_1 = db.session.query(WineListdata).filter_by(Brandname=selected_wine[0]).first()
+    wine_selectedid_2 = db.session.query(WineListdata).filter_by(Brandname=selected_wine[1]).first()
 
-    WineLiswine_scorelist =[]
-    score1_spicy_s=[]
-    score2_acidity_s=[]
-    score3_total_s=[]
-    comment_name_s=[]
-    i1=0
+    comment_data1 = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid_1.id).all()
+    comment_data2 = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid_2.id).all()
 
-    ##アセスデータかデータを抽出
-    wine_selectedid = db.session.query(WineListdata).filter_by(Brandname=selected_wine[0]).first()
-    comment_data = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid.id).all()
     MemberList_DB = db.session.query(Member).all() #DBからメンバーリストを割り当てる
 
 
-
-    for wine in allwinelist:
-        if wine.Brandname == selected_wine[0] : 
-
-            for test in wine.assessment2:
-                 
-                    user_name = db.session.query(Member.name).filter_by(id = test.members_id).first()
-               
-                    if (test.score1_spicy is not None and
-                        test.score2_acidity is not None and 
-                        test.score3_total is not None):
-                         i1=i1+1
-                         score1_spicy_s.append(test.score1_spicy)
-                         score2_acidity_s.append(test.score2_acidity)
-                         score3_total_s.append(test.score3_total*10)
-                         comment_name_s.append([user_name,test.maincomment,score3_total_s])
-        
-        if wine.Brandname == selected_wine[1] : 
-
-            for test in wine.assessment2:
-
-
-                    if (test.score1_spicy is not None and
-                        test.score2_acidity is not None and 
-                        test.score3_total is not None):
-                         i1=i1+1
-                         score1_spicy_s.append(test.score1_spicy)
-                         score2_acidity_s.append(test.score2_acidity)
-                         score3_total_s.append(test.score3_total*10)
-
-
-                    
-
-    return render_template('chart8_bubble.html',xxList=score1_spicy_s,yyList=score2_acidity_s,rrList=score3_total_s,selected_wine=selected_wine,comment_data=comment_data,MemberList_DB=MemberList_DB)
+    return render_template('chart_result.html',selected_wine=selected_wine,comment_data1=comment_data1,comment_data2=comment_data2,MemberList_DB=MemberList_DB,wine_selectedid_1=wine_selectedid_1)
 
 
 

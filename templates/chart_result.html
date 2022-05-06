@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<body>
+■一番目に選択されているワイン <font color="blue"> {{selected_wine[0]}} </font> の評価 です<br>
+<a href="{{wine_selectedid_1.OtherInfo}}">{{wine_selectedid_1.OtherInfo}}</a> <br>
+
+
+    {% for test in comment_data1 %}
+    
+    {% set aaid= test.members_id - 1 %}
+    -----<strong>{{MemberList_DB[aaid].name}} さん</strong>の評価です----- <br>
+    コメントは： {{test.maincomment}}<br>
+    総合点数は： {{test.score3_total}}<br>
+    香り（果物）： {{test.aroma_1}}<br>
+    香り（花）： {{test.aroma_2}}<br>
+
+    {% endfor %}
+<br>
+■二番目に選択されているワイン <font color="blue"> {{selected_wine[1]}} </font> の評価 です<br>
+
+    {% for test in comment_data2 %}
+    
+    {% set aaid= test.members_id - 1 %}
+    -----<strong>{{MemberList_DB[aaid].name}} さん</strong>の評価です----- <br>
+    コメントは： {{test.maincomment}}<br>
+    総合点数は： {{test.score3_total}}<br>
+    香り（果物）： {{test.aroma_1}}<br>
+    香り（花）： {{test.aroma_2}}<br>
+
+    {% endfor %}
+<br>
+
+    <img src="{{ url_for('scatter_png') }}" alt="Image">
+
+ </body>
+
+
+
+{% endblock %}

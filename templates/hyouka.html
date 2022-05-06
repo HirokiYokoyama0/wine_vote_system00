@@ -17,7 +17,32 @@
                 酸味度合い:
                 <input type="number" name="score2_acidity" size="13" min="0" max="5" placeholder="酸味度合い" >
                 トータルスコア:
-                <input type="text" name="score3_total"  size="13" min="0" max="5" placeholder="トータルスコア" ><br><br>
+                <input type="text" name="score3_total"  size="13" min="0" max="5" placeholder="トータルスコア" >
+                <br><br> 
+                
+                香り1（果物）:
+                <select name="sel_aroma_kudamono">
+                    <option value="0">-</option>
+                    <option value="柑橘">柑橘</option>
+                    <option value="青リンゴ">青リンゴ</option>
+                    <option value="洋ナシ">洋ナシ</option>
+                    <option value="花梨">花梨</option>
+
+                </select>
+                香り2（花、植物）:
+                <select name="sel_aroma_hana">
+                    <option value="0">-</option>
+                    <option value="菩提樹" rel ='icon[bodaijyu.jpg]'>菩提樹</option>
+                    <option value="スイカズラ" rel ='bodaijyu.jpg'>スイカズラ</option>
+                    <option value="アカシア">アカシア</option>
+                    <option value="白バラ">白バラ</option>
+                    <option value="キンモクセイ">キンモクセイ</option>
+                </select>
+
+
+
+
+                <br><br>
                 評価コメント:
                 <input type="text" name="comment" size="115" placeholder="コメントを入れてください" >
                 <button type = "submit" name = "action" value = {{ winename.id }} >  評点を登録</button>
@@ -27,6 +52,12 @@
     </p>
 
 {% endfor %}
+
+
+<div style="text-align: left">
+    <img src="../static/image/香り_果物一覧.jpg" alt="ウルフ✗">
+    <br>
+</div>
 
 <br>
 
