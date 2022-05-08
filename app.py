@@ -398,46 +398,27 @@ def scatter_png():
     score2_acidity_l=[[],[]]
     score3_total_l=[[],[]]
     username_l=[[],[]]
-
-    score1_spicy_s=[]
-    score2_acidity_s=[]
-    score3_total_s=[]
-    username_s=[]
-    i1=0
-
+ 
     ##WineListDataから、セレクトされているWineを抽出
-    wine_selectedid = db.session.query(WineListdata).filter_by(Selectedflg=1).first()
-    comment_data = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid.id).all()
-    ##MemberList_DB = db.session.query(Member).all() #DBからメンバーリストを割り当てる
+
 
     ## WineListdataとAssecementdataを結合
     wine_selectedid2 = db.session.query(WineListdata).filter_by(Selectedflg=1).all()
     allwinelist = db.session.query(WineListdata).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).all()
 
-    print("======>",wine_selectedid2)
+
 
 
     for wine in allwinelist:
         if wine.Brandname == wine_selectedid2[0].Brandname : 
 
             for test in wine.assessment2:
-                    print("ases_id->",test.id)
-                    print("選択されたブランド名→",wine.Brandname)
-                    print("選択された品種のメインコメントです→",test.maincomment)
-                    print("スコア1です->",test.score1_spicy)
-                    print("スコア2です->",test.score2_acidity)
-                    print("スコア3です->",test.score3_total)
-                   
-                    user_name = db.session.query(Member.name).filter_by(id = test.members_id).first()
-                    user_name2 = db.session.query(Member).filter_by(id = test.members_id).first()
-                    print("menです1->",test.members_id)
-                    print("menです2->",user_name)
-                    print("menです3->",user_name2.name)
-                   
-                    score1_spicy_l[0].append(test.score1_spicy)
-                    score2_acidity_l[0].append(test.score2_acidity)
-                    score3_total_l[0].append(test.score3_total)
-                    username_l[0].append(user_name2.name)
+                user_name2 = db.session.query(Member).filter_by(id = test.members_id).first()
+
+                score1_spicy_l[0].append(test.score1_spicy)
+                score2_acidity_l[0].append(test.score2_acidity)
+                score3_total_l[0].append(test.score3_total)
+                username_l[0].append(user_name2.name)
         
         elif wine.Brandname == wine_selectedid2[1].Brandname : 
             for test in wine.assessment2:
@@ -471,22 +452,34 @@ def result_by_wine():
 def draw_graph():
 
     selected_wine = request.form.getlist('checkbox')
-    print("===>",selected_wine)    
+    #print("===>",selected_wine,len(selected_wine)) 
+
+    optnum = len(selected_wine)
 
     ## WineListdataとAssecementdataを結合
-    allwinelist = db.session.query(WineListdata).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).all()
+    # allwinelist = db.session.query(WineListdata).join(Assecementdata2, WineListdata.id == Assecementdata2.wine_id).all()
 
     ##アセスデータからセレクトしている２つ分のデータを抽出
-    wine_selectedid_1 = db.session.query(WineListdata).filter_by(Brandname=selected_wine[0]).first()
-    wine_selectedid_2 = db.session.query(WineListdata).filter_by(Brandname=selected_wine[1]).first()
-
-    comment_data1 = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid_1.id).all()
-    comment_data2 = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid_2.id).all()
 
     MemberList_DB = db.session.query(Member).all() #DBからメンバーリストを割り当てる
 
+    if optnum == 1:
+        wine_selectedid_1 = db.session.query(WineListdata).filter_by(Brandname=selected_wine[0]).first()
+        comment_data1 = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid_1.id).all()
+        return render_template('chart_result.html',optnum = optnum,selected_wine=selected_wine,comment_data1=comment_data1,MemberList_DB=MemberList_DB,wine_selectedid_1=wine_selectedid_1)
 
-    return render_template('chart_result.html',selected_wine=selected_wine,comment_data1=comment_data1,comment_data2=comment_data2,MemberList_DB=MemberList_DB,wine_selectedid_1=wine_selectedid_1,wine_selectedid_2=wine_selectedid_2)
+    elif optnum == 2:
+        wine_selectedid_1 = db.session.query(WineListdata).filter_by(Brandname=selected_wine[0]).first()
+        wine_selectedid_2 = db.session.query(WineListdata).filter_by(Brandname=selected_wine[1]).first()
+
+        comment_data1 = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid_1.id).all()
+        comment_data2 = db.session.query(Assecementdata2).filter_by(wine_id=wine_selectedid_2.id).all()
+        return render_template('chart_result.html',optnum = optnum,selected_wine=selected_wine,comment_data1=comment_data1,comment_data2=comment_data2,MemberList_DB=MemberList_DB,wine_selectedid_1=wine_selectedid_1,wine_selectedid_2=wine_selectedid_2)
+
+   
+
+
+   
 
 
 
